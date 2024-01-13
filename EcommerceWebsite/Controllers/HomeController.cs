@@ -1,4 +1,5 @@
 ﻿using EcommerceWebsite.Models;
+using EcommerceWebsite.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace EcommerceWebsite.Controllers
         {
             _logger = logger;
         }
-
+        [Authentication]
         public IActionResult Index(int? page)
         {
             int pageSize = 8;
