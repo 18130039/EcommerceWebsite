@@ -1,4 +1,5 @@
 ﻿using EcommerceWebsite.Models;
+using EcommerceWebsite.Models.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace EcommerceWebsite.Controllers
         {
             _logger = logger;
         }
-
+        [Authentication]
         public IActionResult Index(int? page)
         {
             int pageSize = 8;
@@ -32,6 +33,13 @@ namespace EcommerceWebsite.Controllers
             PagedList<TDanhMucSp> listP = new PagedList<TDanhMucSp>(listProduct, pageNumber, pageSize);
             ViewBag.maloai = maloai;
             return View(listP);
+        }
+        public IActionResult ChiTietSanPham(string masp)
+        {
+            var sanPham = db.TDanhMucSps.SingleOrDefault(x => x.MaSp==masp);
+            var anhSanPham = db.TAnhSps.Where(x => x.MaSp == masp).ToList();
+            ViewBag.anhSanPham = anhSanPham;
+            return View(sanPham);
         }
 
         public IActionResult Privacy()
