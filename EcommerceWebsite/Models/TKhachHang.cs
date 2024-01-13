@@ -5,7 +5,7 @@ namespace EcommerceWebsite.Models;
 
 public partial class TKhachHang
 {
-    public string MaKhanhHang { get; set; } = null!;
+    public string MaKhachHang { get; set; } = null!;
 
     public string? Username { get; set; }
 

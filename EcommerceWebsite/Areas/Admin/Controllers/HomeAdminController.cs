@@ -11,7 +11,7 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
     [Route("admin/homeadmin")]
     public class HomeAdminController : Controller
     {
-        QlbanVaLiContext db= new QlbanVaLiContext();
+        QlbanVaLiContext db = new QlbanVaLiContext();
         [Route("")]
         [Route("index")]
         public IActionResult Index()
@@ -43,7 +43,7 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ThemSanPhamMoi(TDanhMucSp sanPham)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.TDanhMucSps.Add(sanPham);
                 db.SaveChanges();
@@ -72,7 +72,7 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
             {
                 db.Entry(sanPham).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("DanhMucSanPham","HomeAdmin");
+                return RedirectToAction("DanhMucSanPham", "HomeAdmin");
             }
             return View(sanPham);
         }
@@ -81,13 +81,13 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
         public IActionResult XoaSanPham(string maSanPham)
         {
             TempData["Message"] = "";
-            var chiTietSanPhams=db.TChiTietSanPhams.Where(x=>x.MaSp==maSanPham).ToList();
+            var chiTietSanPhams = db.TChiTietSanPhams.Where(x => x.MaSp == maSanPham).ToList();
             if (chiTietSanPhams.Count() > 0)
             {
                 TempData["Message"] = "Không xóa được sản phẩm này";
                 return RedirectToAction("DanhMucSanPham", "HomeAdmin");
             }
-            var anhSanPhams = db.TAnhSps.Where(x => x.MaSp==maSanPham);
+            var anhSanPhams = db.TAnhSps.Where(x => x.MaSp == maSanPham);
             if (anhSanPhams.Any()) db.RemoveRange(anhSanPhams);
             db.Remove(db.TDanhMucSps.Find(maSanPham));
             db.SaveChanges();
