@@ -33,6 +33,13 @@ namespace EcommerceWebsite.Controllers
             ViewBag.maloai = maloai;
             return View(listP);
         }
+        public IActionResult ChiTietSanPham(string masp)
+        {
+            var sanPham = db.TDanhMucSps.SingleOrDefault(x => x.MaSp==masp);
+            var anhSanPham = db.TAnhSps.Where(x => x.MaSp == masp).ToList();
+            ViewBag.anhSanPham = anhSanPham;
+            return View(sanPham);
+        }
 
         public IActionResult Privacy()
         {
