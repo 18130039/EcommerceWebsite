@@ -41,10 +41,22 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
         [Route("ThemSanPhamMoi")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ThemSanPhamMoi(TDanhMucSp sanPham)
+        public IActionResult ThemSanPhamMoi(TDanhMucSp sanPham,IFormFile AnhDaiDien)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
+                if (AnhDaiDien != null && AnhDaiDien.Length > 0)
+                {
+                    // Lưu tập tin hình ảnh vào thư mục trong project của bạn
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages", AnhDaiDien.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        AnhDaiDien.CopyTo(stream);
+                    }
+                    // Lưu đường dẫn tới tập tin hình ảnh vào model
+                    sanPham.AnhDaiDien = AnhDaiDien.FileName;
+                }
+
                 db.TDanhMucSps.Add(sanPham);
                 db.SaveChanges();
                 return RedirectToAction("DanhMucSanPham");

@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form method="post" asp-action="ThemSanPhamMoi">
+        <form method="post" asp-action="ThemSanPhamMoi" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="MaSp" class="control-label"></label>
@@ -27,16 +27,6 @@
             <div class="form-group">
                 <label asp-for="MaChatLieu" class="control-label"></label>
                 <select asp-for="MaChatLieu" class ="form-control" asp-items="ViewBag.MaChatLieu"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="NganLapTop" class="control-label"></label>
-                <input asp-for="NganLapTop" class="form-control" />
-                <span asp-validation-for="NganLapTop" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Model" class="control-label"></label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CanNang" class="control-label"></label>
@@ -57,29 +47,14 @@
                 <select asp-for="MaNuocSx" class ="form-control" asp-items="ViewBag.MaNuocSx"></select>
             </div>
             <div class="form-group">
-                <label asp-for="MaDacTinh" class="control-label"></label>
-                <input asp-for="MaDacTinh" class="form-control" />
-                <span asp-validation-for="MaDacTinh" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Website" class="control-label"></label>
-                <input asp-for="Website" class="form-control" />
-                <span asp-validation-for="Website" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ThoiGianBaoHanh" class="control-label"></label>
                 <input asp-for="ThoiGianBaoHanh" class="form-control" />
                 <span asp-validation-for="ThoiGianBaoHanh" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GioiThieuSp" class="control-label"></label>
-                <input asp-for="GioiThieuSp" class="form-control" />
+                <textarea asp-for="GioiThieuSp" class="form-control" id="GioiThieuSpEditor"></textarea>
                 <span asp-validation-for="GioiThieuSp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ChietKhau" class="control-label"></label>
-                <input asp-for="ChietKhau" class="form-control" />
-                <span asp-validation-for="ChietKhau" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MaLoai" class="control-label"></label>
@@ -91,7 +66,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="AnhDaiDien" class="control-label"></label>
-                <input asp-for="AnhDaiDien" class="form-control" />
+                <input type="file" id="AnhDaiDien" name="AnhDaiDien" class="form-control" accept="image/*" />
                 <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -112,6 +87,11 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="DanhMucSanPham">Quay lại</a>
 </div>
+@section scripts {
+    <script>
+        CKEDITOR.replace('GioiThieuSpEditor');
+    </script>
+}
 

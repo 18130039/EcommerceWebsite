@@ -10,7 +10,7 @@
 <h3>Danh mục các sản phẩm</h3>
 
 <p>
-    <a asp-action="ThemSanPhamMoi">Create New</a>
+    <a asp-action="ThemSanPhamMoi">Tạo sản phẩm mới</a>
 </p>
 <p>
     @TempData["Message"]
@@ -34,14 +34,14 @@
             </th>
        
             <th>
-                Chiết khấu
+                Giá nhỏ nhất
             </th>
       
             <th>
-                Giá nhỏ nhất
+                Giá lớn nhất
             </th>
             <th>
-                Giá lớn nhất
+                Hành động
             </th>
       
             <th></th>
@@ -85,7 +85,7 @@
             <td>
                 <a asp-action="SuaSanPham" asp-route-maSanPham="@item.MaSp">Sửa</a> |
                 <a asp-action="Details" asp-route-id="@item.MaSp">Chi tiết</a> |
-                <a asp-action="XoaSanPham" asp-route-id="@item.MaSp">Xóa</a>
+                    <a asp-action="XoaSanPham" asp-route-maSanPham="@item.MaSp">Xóa</a>
             </td>
         </tr>
 }
