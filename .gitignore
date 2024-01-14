@@ -361,8 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/EcommerceWebsite/Models/QlbanVaLiContext.cs
-/EcommerceWebsite/Models/TDanhMucSp.cs
-/EcommerceWebsite/Models/TKhachHang.cs
-/EcommerceWebsite/wwwroot/ProductImages/355457819_766290375288726_1350949210907263064_n.jpg
-/EcommerceWebsite/wwwroot/ProductImages/Character_Jingliu_Splash_Art.jpg
