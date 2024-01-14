@@ -9,6 +9,7 @@ builder.Services.AddControllersWithViews();
 var connectionString = builder.Configuration.GetConnectionString("QlbanVaLiContext");
 builder.Services.AddDbContext<QlbanVaLiContext>(x => x.UseSqlServer(connectionString));
 builder.Services.AddScoped<ILoaiSpRepository, LoaiSpRepository>();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 var app = builder.Build();
 
@@ -29,6 +30,6 @@ app.UseAuthorization();
 app.UseSession();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Access}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

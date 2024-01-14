@@ -16,12 +16,12 @@ namespace EcommerceWebsite.Controllers
         {
             _logger = logger;
         }
-        [Authentication]
+       /* [Authentication]*/
         public IActionResult Index(int? page)
         {
             int pageSize = 8;
             int pageNumber = page==null || page<0 ? 1 : page.Value;
-            var listProduct = db.TDanhMucSps.AsNoTracking().OrderBy(x =>x.TenSp);
+            var listProduct = db.TDanhMucSps.AsNoTracking().OrderBy(x =>x.GiaNhoNhat);
             PagedList<TDanhMucSp> listP = new PagedList<TDanhMucSp>(listProduct,pageNumber,pageSize);
             return View(listP);
         }
@@ -29,7 +29,7 @@ namespace EcommerceWebsite.Controllers
         {
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            var listProduct = db.TDanhMucSps.AsNoTracking().Where(x=>x.MaLoai==maloai).OrderBy(x => x.TenSp);
+            var listProduct = db.TDanhMucSps.AsNoTracking().Where(x=>x.MaLoai==maloai).OrderBy(x => x.GiaNhoNhat);
             PagedList<TDanhMucSp> listP = new PagedList<TDanhMucSp>(listProduct, pageNumber, pageSize);
             ViewBag.maloai = maloai;
             return View(listP);
@@ -40,17 +40,6 @@ namespace EcommerceWebsite.Controllers
             var anhSanPham = db.TAnhSps.Where(x => x.MaSp == masp).ToList();
             ViewBag.anhSanPham = anhSanPham;
             return View(sanPham);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
