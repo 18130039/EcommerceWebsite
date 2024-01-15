@@ -1,0 +1,7 @@
+﻿@model EcommerceWebsite.Models.Cart.Cart
+<div class="header__cart">
+    <ul>
+        <li><a asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-bag"></i> <span>@Model?.Lines.Count</span></a></li>
+    </ul>
+    <div class="header__cart__price">Price: <span>@Model?.ComputeTotalValue()</span></div>
+</div>

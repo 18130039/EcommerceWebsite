@@ -1,5 +1,5 @@
-﻿@using EcommerceWebsite.Models.ViewModels
-@model CartItemViewModel
+﻿@using EcommerceWebsite.Models.Cart
+@model Cart
 @{
     ViewData["Title"] = "Gio Hang";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
@@ -39,33 +39,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.CartItems.Count > 0)
+                            @if (Model?.Lines?.Count > 0)
                             {
 
-                                @foreach (var item in Model.CartItems)
+                                @foreach (var item in Model?.Lines)
                                 {
                                     <tr>
                                         <td class="shoping__cart__item">
-                                            <img style="width:100px" src="@Url.Content("../ProductImages/" + item.Image)" alt="">
-                                            <h5>@item.ProductName</h5>
+                                            <img style="width:100px" src="@Url.Content("../ProductImages/" + item.Product.AnhDaiDien)" alt="">
+                                            <h5>@item.Product.TenSp</h5>
                                         </td>
                                         <td class="shoping__cart__price">
-                                            @item.Price
+                                           @item.Product.GiaLonNhat
                                         </td>
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
                                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                                    <a asp-controller="Cart" asp-action="Decrease" asp-route-masp="@item.ProductId" class="btn btn-danger">-</a>
-                                                    <input style="width:35px; text-align:center; border="none" type="text" value="@item.Quantity">
-                                                    <a asp-controller="Cart" asp-action="Increase" asp-route-masp="@item.ProductId" class="btn btn-success">+</a>
+                                                    <a asp-controller="Cart" asp-action="Decrease" asp-route-masp="@item.Product.MaSp" class="btn btn-danger">-</a>
+                                                    <input style="width:35px; text-align:center; border=none" type="text" value="@item.Quantity">
+                                                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-masp="@item.Product.MaSp" class="btn btn-success">+</a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="shoping__cart__total">
-                                            @Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString()
+                                            @(item.Product.GiaLonNhat * item.Quantity)
                                         </td>
                                         <td class="shoping__cart__item__close">
-                                            <a asp-controller="Cart" asp-action="Remove" asp-route-masp="@item.ProductId"><span class="icon_close"></span></a>
+                                            <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-masp="@item.Product.MaSp"><span class="icon_close"></span></a>
                                         </td>
                                     </tr>
                                 }
@@ -110,8 +110,8 @@
                 <div class="shoping__checkout">
                     <h5>Cart Total</h5>
                     <ul>
-                        <li>Subtotal <span></span></li>
-                        <li>Total <span>@Model.GrandTotal.ToString()</span></li>
+                        
+                        <li>Total: @Model.ComputeTotalValue() <span></span></li>
                     </ul>
                     <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
