@@ -1,9 +1,7 @@
 ﻿using EcommerceWebsite.Infrastructure;
 using EcommerceWebsite.Models;
-using EcommerceWebsite.Models.Cart;
+using EcommerceWebsite.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using NuGet.Protocol.Core.Types;
 
 namespace EcommerceWebsite.Controllers
 {
@@ -14,48 +12,96 @@ namespace EcommerceWebsite.Controllers
         {
             _context = context;
         }
-
-        public Cart? Cart { get; set; }
         public IActionResult Index()
         {
-            return View("Cart", Cart = HttpContext.Session.GetJson<Cart>("cart"));
-        }
-        public IActionResult AddToCart(string masp)
-        {
-            TDanhMucSp? product = _context.TDanhMucSps
-.FirstOrDefault(p => p.MaSp == masp);
-            if (product != null)
+            List<CartItemModel> cartItems = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemViewModel cartVM = new()
             {
-                Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
-                Cart.AddItem(product, 1);
-                HttpContext.Session.SetJson("cart", Cart);
-            }
-            return View("Cart", Cart);
+                CartItems = cartItems,
+                GrandTotal = cartItems.Sum(x => x.Quantity * x.Price)
+            };
+            return View(cartVM);
         }
-        public IActionResult UpdateCart(string masp)
+        public async Task<IActionResult> AddToCart(string masp)
         {
-            TDanhMucSp? product = _context.TDanhMucSps
-.FirstOrDefault(p => p.MaSp == masp);
-            if (product != null)
+            TDanhMucSp product = await _context.TDanhMucSps.FindAsync(masp);
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            CartItemModel cartItems = cart.Where(c => c.ProductId == masp).FirstOrDefault();
+            if (cartItems == null)
             {
-                Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
-                Cart.AddItem(product, -1);
-                HttpContext.Session.SetJson("cart", Cart);
+                cart.Add(new CartItemModel(product));
             }
-            return View("Cart", Cart);
+            else
+            {
+                cartItems.Quantity += 1;
+            }
+            HttpContext.Session.SetJson("Cart", cart);
+            TempData["success"] = "Them vao gio hang thanh cong";
+            return Redirect(Request.Headers["Referer"].ToString());
         }
-        public IActionResult RemoveFromCart(string masp)
+        public async Task<IActionResult> Decrease(string masp)
         {
-            TDanhMucSp? product = _context.TDanhMucSps
-.FirstOrDefault(p => p.MaSp == masp);
-            if (product != null)
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            CartItemModel cartItem = cart.Where(x => x.ProductId == masp).FirstOrDefault();
+            if (cartItem.Quantity > 1)
             {
-                Cart = HttpContext.Session.GetJson<Cart>("cart");
-                Cart.RemoveLine(product);
-                HttpContext.Session.SetJson("cart", Cart);
+                --cartItem.Quantity;
             }
-            return View("Cart", Cart);
+            else
+            {
+                cart.RemoveAll(x => x.ProductId == masp);
+            }
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
         }
-
+        public async Task<IActionResult> Increase(string masp)
+        {
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            CartItemModel cartItem = cart.Where(x => x.ProductId == masp).FirstOrDefault();
+            if (cartItem.Quantity >= 1)
+            {
+                ++cartItem.Quantity;
+            }
+            else
+            {
+                cart.RemoveAll(x => x.ProductId == masp);
+            }
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Remove(string masp)
+        {
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            cart.RemoveAll(p => p.ProductId == masp);
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Clear()
+        {
+            HttpContext.Session.Remove("Cart");
+            return RedirectToAction("Index");
+        }
     }
+
 }

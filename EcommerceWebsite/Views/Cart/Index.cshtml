@@ -1,9 +1,10 @@
-﻿@using EcommerceWebsite.Models.Cart
+﻿@using EcommerceWebsite.Models.ViewModels
+@model CartItemViewModel
 @{
     ViewData["Title"] = "Gio Hang";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
 }
-@model Cart
+
 <!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
     <div class="container">
@@ -38,33 +39,46 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var line in Model?.Lines)
+                            @if (Model.CartItems.Count > 0)
+                            {
+
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img style="width:100px" src="@Url.Content("../ProductImages/" + item.Image)" alt="">
+                                            <h5>@item.ProductName</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @item.Price
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <a asp-controller="Cart" asp-action="Decrease" asp-route-masp="@item.ProductId" class="btn btn-danger">-</a>
+                                                    <input style="width:35px; text-align:center; border="none" type="text" value="@item.Quantity">
+                                                    <a asp-controller="Cart" asp-action="Increase" asp-route-masp="@item.ProductId" class="btn btn-success">+</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="shoping__cart__total">
+                                            @Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString()
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <a asp-controller="Cart" asp-action="Remove" asp-route-masp="@item.ProductId"><span class="icon_close"></span></a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                            else
                             {
                                 <tr>
-                                    <td class="shoping__cart__item">
-                                        <img style="width:100px" src="@Url.Content("../ProductImages/" + line.Product.AnhDaiDien)" alt="">
-                                        <h5>@line.Product.TenSp</h5>
-                                    </td>
-                                    <td class="shoping__cart__price">
-                                        @line.Product.GiaLonNhat
-                                    </td>
-                                    <td class="shoping__cart__quantity">
-                                        <div class="quantity">
-                                            <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a asp-controller="Cart" asp-action="UpdateCart" asp-route-masp="@line.Product.MaSp" class="btn btn-danger">-</a>
-                                                <input style="width:35px; text-align:center; border="none" type="text" value="@line.Quantity">
-                                                <a asp-controller="Cart" asp-action="AddToCart" asp-route-masp="@line.Product.MaSp" class="btn btn-success">+</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="shoping__cart__total">
-                                        @(line.Product.GiaLonNhat * line.Quantity)
-                                    </td>
-                                    <td class="shoping__cart__item__close">
-                                        <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-masp="@line.Product.MaSp"><span class="icon_close"></span></a>
-                                    </td>
+                                    <td colspan="5"><h4 style="text-align: left">triong</h4></td>
                                 </tr>
+
                             }
+
                         </tbody>
                     </table>
                 </div>
@@ -74,6 +88,7 @@
             <div class="col-lg-12">
                 <div class="shoping__cart__btns">
                     <a asp-controller="Home" asp-action="Index" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                    <a asp-controller="Cart" asp-action="Clear" class="btn btn-danger cart-btn">CLEAR CART</a>
                     <a href="#" class="primary-btn cart-btn cart-btn-right">
                         <span class="icon_loading"></span>
                         Upadate Cart
@@ -95,8 +110,8 @@
                 <div class="shoping__checkout">
                     <h5>Cart Total</h5>
                     <ul>
-                        <li>Subtotal <span>@Model.ComputeTotalValue()</span></li>
-                        <li>Total <span>@Model.ComputeTotalValue()</span></li>
+                        <li>Subtotal <span></span></li>
+                        <li>Total <span>@Model.GrandTotal.ToString()</span></li>
                     </ul>
                     <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
