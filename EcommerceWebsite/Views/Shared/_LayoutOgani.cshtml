@@ -122,8 +122,21 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a asp-controller="Access" asp-action="Logout"><i class="fa fa-user"></i> Logout</a>
-                                @*  <a href="#"><i class="fa fa-user"></i> Login</a> *@
+                                @{
+                                    string userId = Context.Session.GetString("UserName");
+                                }
+
+                                @if (!string.IsNullOrEmpty(userId))
+                                {
+                                    <p>Xin chao, @userId</p>
+                                    <a asp-controller="Access" asp-action="Logout"><i class="fa fa-user"></i> Logout</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Access" asp-action="Login"><i class="fa fa-user"></i> Login</a>
+                                }
+@*                                 <a asp-controller="Access" asp-action="Logout"><i class="fa fa-user"></i> Logout</a>
+                                 <a href="#"><i class="fa fa-user"></i> Login</a> *@
                             </div>
                         </div>
                     </div>
