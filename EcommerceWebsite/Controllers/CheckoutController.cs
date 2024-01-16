@@ -87,17 +87,8 @@ return View("Checkout");
                 _context.THoaDonBans.Add(tHoaDonBan);
                 _context.SaveChanges();
 
-
+                HttpContext.Session.Remove("cart"); ;
                 return RedirectToAction("Index", "Home");
-                /*                var tChitiethdb = new TChiTietHdb();
-                                tChitiethdb.MaHoaDon = hdId;
-                                tChitiethdb.MaChiTietSp = "cad20230001br";
-                                tChitiethdb.DonGiaBan = 12312313;
-                                tChitiethdb.SoLuongBan = 3;
-                                _context.TChiTietHdbs.Add(tChitiethdb);
-                                _context.SaveChanges();
-
-                                return RedirectToAction("Index", "Home");*/
             }
             return View();
         }
