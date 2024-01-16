@@ -2,11 +2,11 @@
 @model Cart
 @{
     ViewData["Title"] = "Gio Hang";
-    Layout = "~/Views/Shared/_LayoutOgani.cshtml";
+    Layout = "~/Views/Shared/_CartCheckoutLayout.cshtml";
 }
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+<section class="breadcrumb-section set-bg" data-setbg="../ContentOgani/img/breadcrumb.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -113,7 +113,7 @@
                         
                         <li>Total: @Model.ComputeTotalValue() <span></span></li>
                     </ul>
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    <a asp-controller="Checkout" asp-action="Checkout" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
             </div>
         </div>
