@@ -22,7 +22,7 @@ namespace EcommerceWebsite.Controllers
 {
 return View("Checkout");
 }*/
-      
+
         [Authentication]
         public IActionResult Checkout()
         {
@@ -37,15 +37,49 @@ return View("Checkout");
                     MaKhachHang = userId,
                     MaNhanVien = "NV1"
                 };
+
                 Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
                 foreach (var cart in Cart.Lines)
-                {
-                    
+                {   //Neu maChiTietSp khong ton tai trong TChiTietSanPhams thi tao moi theo guid
+                    var maChiTietSp = _context.TChiTietSanPhams
+                        .Where(x => x.MaSp == cart.Product.MaSp)
+                        .Select(x => x.MaChiTietSp)
+                        .FirstOrDefault();
+                    if (maChiTietSp == null)
+                    {
+                        // Create a new MaChiTietSp using GUID
+                        maChiTietSp = Guid.NewGuid().ToString("N").Substring(0, 25);
+
+                        // Assuming TChiTietSanPham has a constructor that takes MaSp and MaChiTietSp
+                        var newChiTietSp = new TChiTietSanPham
+                        {
+                            MaSp = cart.Product.MaSp,
+                            MaChiTietSp = maChiTietSp
+                        };
+
+                        // Add the newChiTietSp to the context and save changes
+                        _context.TChiTietSanPhams.Add(newChiTietSp);
+                        _context.SaveChanges();
+                    }
+                    //Neu dongiaban chua ton tai trong chi tiet san pham thi lay gialonnhat hoac gianhonhat
+                    var donGiaBan = (decimal?)_context.TChiTietSanPhams
+                        .Where(x => x.MaSp == cart.Product.MaSp)
+                        .Select(x => x.DonGiaBan)
+                        .FirstOrDefault();
+
+                    if (donGiaBan == null)
+                    {
+                        donGiaBan = cart.Product.GiaLonNhat;
+                    }
+                    else
+                    {
+                        donGiaBan = cart.Product.GiaNhoNhat;
+                    }
                     var tChitiethdb = new TChiTietHdb
                     {
                         MaHoaDon = hdId,
-                        MaChiTietSp = _context.TChiTietSanPhams.Where(x=>x.MaSp == cart.Product.MaSp).Select(x=>x.MaChiTietSp).FirstOrDefault(),
-                        DonGiaBan = (decimal?)_context.TChiTietSanPhams.Where(x => x.MaSp == cart.Product.MaSp).Select(x => x.DonGiaBan).FirstOrDefault(),
+                        MaChiTietSp = maChiTietSp,
+                        DonGiaBan = donGiaBan,
                         SoLuongBan = cart.Quantity
                     };
                     tHoaDonBan.TChiTietHdbs.Add(tChitiethdb);
