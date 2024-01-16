@@ -5,5 +5,6 @@
         public int CartLineID { get; set; }
         public TDanhMucSp Product { get; set; } = new();
         public int Quantity { get; set; }
+       
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace EcommerceWebsite.Models.Cart
+﻿using EcommerceWebsite.Controllers;
+
+namespace EcommerceWebsite.Models.Cart
 {
     public class Cart
     {
@@ -8,12 +10,13 @@
             CartLine? line = Lines
             .Where(p => p.Product.MaSp == product.MaSp)
             .FirstOrDefault();
+
             if (line == null)
             {
                 Lines.Add(new CartLine
                 {
                     Product = product,
-                    Quantity = quantity
+                    Quantity = quantity,
                 });
             }
             else
