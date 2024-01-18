@@ -29,7 +29,8 @@ namespace EcommerceWebsite.Controllers
                 Cart.AddItem(product, 1);
                 HttpContext.Session.SetJson("cart", Cart);
             }
-            return View("Cart", Cart);
+            return RedirectToAction("Index", "Home");
+           /* return View("Cart", Cart);*/
 
         }
         public IActionResult Decrease(string masp)
