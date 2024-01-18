@@ -1,4 +1,5 @@
 ﻿using EcommerceWebsite.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +10,13 @@ namespace EcommerceWebsite.Areas.Admin.Controllers
     [Area("admin")]
     [Route("admin")]
     [Route("admin/homeadmin")]
+    [Authentication("Admin")]
     public class HomeAdminController : Controller
     {
         QlbanVaLiContext db = new QlbanVaLiContext();
         [Route("")]
         [Route("index")]
+       
         public IActionResult Index()
         {
             return View();

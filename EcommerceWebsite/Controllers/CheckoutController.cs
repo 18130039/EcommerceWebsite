@@ -1,11 +1,12 @@
 ﻿using EcommerceWebsite.Infrastructure;
 using EcommerceWebsite.Models;
-using EcommerceWebsite.Models.Authentication;
+
 using EcommerceWebsite.Models.Cart;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceWebsite.Controllers
 {
+    [Authentication("User")]
     public class CheckoutController : Controller
     {
         private readonly QlbanVaLiContext _context;

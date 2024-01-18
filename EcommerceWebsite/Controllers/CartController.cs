@@ -7,8 +7,10 @@ using NuGet.Protocol.Core.Types;
 
 namespace EcommerceWebsite.Controllers
 {
+    [Authentication("User")]
     public class CartController : Controller
     {
+        
         public Cart? Cart { get; set; }
         private readonly QlbanVaLiContext _context;
         public CartController(QlbanVaLiContext context)

@@ -1,5 +1,5 @@
 ﻿using EcommerceWebsite.Models;
-using EcommerceWebsite.Models.Authentication;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -7,6 +7,7 @@ using X.PagedList;
 
 namespace EcommerceWebsite.Controllers
 {
+    [Authentication("User")]
     public class HomeController : Controller
     {
         QlbanVaLiContext db = new QlbanVaLiContext();

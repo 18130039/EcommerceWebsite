@@ -49,7 +49,10 @@
                                 <span class="availability-status online"></span>
                             </div>
                             <div class="nav-profile-text">
-                                <p class="mb-1 text-black">Admin</p>
+                                @{
+                                    string userId = Context.Session.GetString("UserName");
+                                }
+                                <p class="mb-1 text-black">@userId</p>
                             </div>
                         </a>
                         <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -58,7 +61,9 @@
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">
-                                <i class="mdi mdi-logout me-2 text-primary"></i> Signout
+
+                                <i asp-controller="Access" asp-action="Logout" class="mdi mdi-logout me-2 text-primary"></i> Signout
+
                             </a>
                         </div>
                     </li>

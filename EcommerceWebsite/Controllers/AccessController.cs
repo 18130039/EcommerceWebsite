@@ -31,11 +31,25 @@ namespace EcommerceWebsite.Controllers
                 if (u != null)
                 {
                     HttpContext.Session.SetString("UserName", u.Username.ToString());
-                    return RedirectToAction("Index", "Home");
+                    HttpContext.Session.SetString("UserRole", (u.LoaiUser == 0) ? "Admin" : "User");
+                    if (u.LoaiUser == 0)
+                    {
+                        // Redirect to the admin page
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else if (u.LoaiUser == 1)
+                    {
+                        // Redirect to the home page
+                        return RedirectToAction("Index", "Home");
+                    }
 
                 }
             }
             return View();
+        }
+        public IActionResult Unauthorized()
+        {
+            return View("Unauthorized");
         }
         public IActionResult Logout()
         {
@@ -84,74 +98,7 @@ namespace EcommerceWebsite.Controllers
         }
     }
 
-    /*       [HttpPost]
-           [ValidateAntiForgeryToken]
-           public async Task<IActionResult> Register(SignUpViewModel model)
-           {
-               if (!ModelState.IsValid)
-               {
-                   // Log ModelState errors for debugging
-                   foreach (var modelState in ModelState.Values)
-                   {
-                       foreach (var error in modelState.Errors)
-                       {
-                           // Log or print error messages
-                           Console.WriteLine(error.ErrorMessage);
-                       }
-                   }
-
-                   return View(model);
-               }
-
-               // Check if the username is already taken
-               if (await db.TUsers.AnyAsync(u => u.Username == model.Username))
-               {
-                   ModelState.AddModelError("Username", "Username is already taken.");
-                   return View(model);
-               }
-
-               // Create a new TUser instance
-               var newUser = new TUser
-               {
-                   Username = model.Username,
-                   Password = model.Password,
-                   LoaiUser = 1
-               };
-
-               // Create a new TKhachHang instance
-               var newCustomer = new TKhachHang
-               {
-                   MaKhachHang = Guid.NewGuid().ToString(), // Generate a unique identifier for MaKhachHang
-                   Username = model.Username,
-                   // Set other properties as needed
-                   TenKhachHang = model.Name,
-                   NgaySinh = model.Birthday,
-                   SoDienThoai = model.Phone
-
-               };
-
-               // Save entities to the database
-               db.TUsers.Add(newUser);
-               db.TKhachHangs.Add(newCustomer);
-
-               try
-               {
-                   var result = await db.SaveChangesAsync();
-
-                   // Log or print the result for debugging
-                   Console.WriteLine($"Number of entries written to the database: {result}");
-
-                   await db.SaveChangesAsync();
-                   return RedirectToAction("Index", "Home"); // Redirect to home or login page
-               }
-               catch (Exception ex)
-               {
-
-                   // Handle exception
-                   return View(model);
-               }
-           }*/
-
+  
 
 
 }

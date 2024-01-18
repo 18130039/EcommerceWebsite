@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewData["Title"] = "Unauthorized";
+}
+
+<h1>Unauthorized</h1>
+<p>You do not have permission to access this page.</p>
+
+<div>
+    @{
+        var userRole = Context.Session.GetString("UserRole");
+    }
+    @if (userRole == "Admin")
+    {
+        <a asp-action="Index" asp-controller="Admin" class="btn btn-primary">Back Admin Home</a>
+    }else{
+        <a asp-action="Index" asp-controller="Home" class="btn btn-primary">Back User Home</a>
+    }
+   
+</div>
