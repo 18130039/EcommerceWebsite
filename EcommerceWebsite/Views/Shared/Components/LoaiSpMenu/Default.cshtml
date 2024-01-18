@@ -8,8 +8,44 @@
         <ul>
             @foreach (var item in Model)
             {
-                <li><a asp-controller="Home" asp-action="SanPhamTheoLoai" asp-route-maloai="@item.MaLoai">@item.Loai</a></li>
+                var getUrl = "https://localhost:7135/api/productapi/" + item.MaLoai;
+                <li><a style="cursor:pointer" onclick="showProductsByCategory('@getUrl')">@item.Loai</a></li>
+                @* <li><a asp-controller="Home" asp-action="SanPhamTheoLoai" asp-route-maloai="@item.MaLoai">@item.Loai</a></li> *@
             }
-            
-
+        </ul>
     </div>
+</div>
+<script>
+    function showProductsByCategory(getUrl) {
+        var str = '';
+        $.ajax({
+            type: 'GET',
+            url: getUrl,
+            dataType: 'json',
+            success: function (data) {
+                $.each(data, function (index, model) {
+                    str += '<div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">';
+                    str += '    <div class="featured__item">';
+                    var linkImage = "../ProductImages/" + model.anhDaiDien;
+                    str += '        <div class="featured__item__pic set-bg" data-setbg="' + linkImage + '" style="background-image: url(\'' + linkImage + '\');">'; str += '            <ul class="featured__item__pic__hover">';
+                    str += '                <li><a href="#"><i class="fa fa-heart"></i></a></li>';
+                    str += '                <li><a href="#"><i class="fa fa-retweet"></i></a></li>';
+                    str += '                <li><a href="/Cart/AddToCart?maSp=' + model.maSp + '"><i class="fa fa-shopping-cart"></i></a></li>';
+                    str += '            </ul>';
+                    str += '        </div>';
+                    str += '        <div class="featured__item__text">';
+                    str += '            <h6><a href="/Home/ChiTietSanPham?maSp=' + model.maSp + '">' + model.tenSp + '</a></h6>';
+                    str += '            <h5>' + model.giaNhoNhat + '</h5>';
+                    str += '        </div>';
+                    str += '    </div>';
+                    str += '</div>';
+
+                });
+                $('#displayProducts').html(str);
+            },
+            Error: function (xhr) {
+                alert(xhr.responeText)
+            }
+        });
+    }
+</script>

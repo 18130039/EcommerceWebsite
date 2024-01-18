@@ -2,7 +2,6 @@
 using EcommerceWebsite.Models;
 using EcommerceWebsite.Models.Authentication;
 using EcommerceWebsite.Models.Cart;
-using EcommerceWebsite.Models.Checkout;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceWebsite.Controllers
