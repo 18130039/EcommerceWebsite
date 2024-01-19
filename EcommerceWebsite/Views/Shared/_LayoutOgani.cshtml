@@ -195,8 +195,9 @@
                                     All Categories
                                     <span class="arrow_carrot-down"></span>
                                 </div>
-                                <input type="text" placeholder="What do yo u need?">
+                                <input type="text" id="search" placeholder="What do yo u need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
+                                <div id="selectedProduct"></div>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -222,7 +223,6 @@
         </div>
     </section>
     <!-- Hero Section End -->
-
     <!-- Featured Section Begin -->
     <section class="featured spad">
         <div class="container">
@@ -234,7 +234,7 @@
                 </div>
             </div>
             <div id="displayProducts" class="row featured__filter">
-                <div class="row" >
+                <div class="row">
 
                     @RenderBody()
                 </div>
@@ -382,8 +382,47 @@
     <script src="~/ContentOgani/js/mixitup.min.js"></script>
     <script src="~/ContentOgani/js/owl.carousel.min.js"></script>
     <script src="~/ContentOgani/js/main.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            $("#search").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("AutoComplete", "Home")',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { term: request.term },
+                        success: function (data) {
+                            console.log(data)
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.tenSp,
+                                    value: item.tenSp,
+                                    anhDaiDien: item.anhDaiDien,
+                                    giaNhoNhat: item.giaNhoNhat,
+                                    maSp: item.MaSp
+                                };
+                            }));
+                        },
+                        error: function (err) {
+                            console.error(err);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    // Handle the selected item
+                    
 
+                    // Redirect to the detail page with the selected product ID
+                    window.location.href = '@Url.Action("ChiTietSanPham", "Home")' + '?masp=' + encodeURIComponent(ui.item.MaSp);
+                    
+                },
+            });
+        });
+
+    </script>
 
 </body>
 

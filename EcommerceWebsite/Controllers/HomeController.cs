@@ -1,5 +1,5 @@
 ﻿using EcommerceWebsite.Models;
-
+using EcommerceWebsite.Models.ProductModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -42,5 +42,22 @@ namespace EcommerceWebsite.Controllers
             ViewBag.anhSanPham = anhSanPham;
             return View(sanPham);
         }
+        [HttpPost]
+        public ActionResult AutoComplete(string term)
+        {
+            var products = db.TDanhMucSps
+                .Where(p => p.TenSp.Contains(term))
+                .Select(p => new Product
+                {
+                    AnhDaiDien = p.AnhDaiDien,
+                    TenSp = p.TenSp,
+                    GiaNhoNhat = p.GiaNhoNhat,
+                    MaSp = p.MaSp
+                })
+                .ToList();
+
+            return Json(products);
+
+        }
     }
-}
+    }
