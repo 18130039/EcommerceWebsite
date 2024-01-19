@@ -25,12 +25,13 @@ namespace EcommerceWebsite.Controllers
         [HttpPost]
         public IActionResult Login(TUser user)
         {
+            var username = HttpContext.Session.GetString("UserName");
             if (HttpContext.Session.GetString("UserName") == null)
             {
                 var u = db.TUsers.Where(x => x.Username.Equals(user.Username) && x.Password.Equals(user.Password)).FirstOrDefault();
                 if (u != null)
                 {
-                    HttpContext.Session.SetString("UserName", u.Username.ToString());
+                    HttpContext.Session.SetString("UserName", db.TKhachHangs.Where(x=>x.Username == u.Username).Select(x=>x.TenKhachHang).FirstOrDefault());
                     HttpContext.Session.SetString("UserRole", (u.LoaiUser == 0) ? "Admin" : "User");
                     if (u.LoaiUser == 0)
                     {
