@@ -394,16 +394,7 @@
                         dataType: 'json',
                         data: { term: request.term },
                         success: function (data) {
-                            console.log(data)
-                            response($.map(data, function (item) {
-                                return {
-                                    label: item.tenSp,
-                                    value: item.tenSp,
-                                    anhDaiDien: item.anhDaiDien,
-                                    giaNhoNhat: item.giaNhoNhat,
-                                    maSp: item.MaSp
-                                };
-                            }));
+                            response(data);
                         },
                         error: function (err) {
                             console.error(err);
@@ -412,12 +403,10 @@
                 },
                 minLength: 2,
                 select: function (event, ui) {
-                    // Handle the selected item
-                    
+                    console.log("ui:", ui);
 
-                    // Redirect to the detail page with the selected product ID
-                    window.location.href = '@Url.Action("ChiTietSanPham", "Home")' + '?masp=' + encodeURIComponent(ui.item.MaSp);
-                    
+                    // Redirect to the detail page with the selected product ID using Razor page syntax
+                    window.location.href = '/Home/ChiTietSanPham?maSp=' + ui.item.maSp;
                 },
             });
         });
