@@ -22,10 +22,9 @@ namespace EcommerceWebsite.Controllers
 {
 return View("Checkout");
 }*/
-
-        [Authentication]
         public IActionResult Checkout()
         {
+            Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
             if (ModelState.IsValid)
             {
                 var userId = HttpContext.Session.GetString("UserName");
@@ -35,10 +34,11 @@ return View("Checkout");
                     MaHoaDon = hdId,
                     NgayHoaDon = DateTime.Now,
                     MaKhachHang = userId,
-                    MaNhanVien = "NV1"
+                    MaNhanVien = "NV1",
+                    TongTienHd = Cart.ComputeTotalValue()
                 };
 
-                Cart = HttpContext.Session.GetJson<Cart>("cart") ?? new Cart();
+               
                 foreach (var cart in Cart.Lines)
                 {   //Neu maChiTietSp khong ton tai trong TChiTietSanPhams thi tao moi theo guid
                     var maChiTietSp = _context.TChiTietSanPhams
@@ -50,7 +50,7 @@ return View("Checkout");
                         // Create a new MaChiTietSp using GUID
                         maChiTietSp = Guid.NewGuid().ToString("N").Substring(0, 25);
 
-                        // Assuming TChiTietSanPham has a constructor that takes MaSp and MaChiTietSp
+                        
                         var newChiTietSp = new TChiTietSanPham
                         {
                             MaSp = cart.Product.MaSp,
@@ -88,9 +88,11 @@ return View("Checkout");
                 _context.SaveChanges();
 
                 HttpContext.Session.Remove("cart"); ;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Success", "Checkout");
             }
             return View();
         }
+        public IActionResult Success() { return View("CheckoutSuccess"); }
     }
+   
 }
